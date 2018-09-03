@@ -1,0 +1,58 @@
+
+class MyComponent extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      items: [],
+      isLoaded: false,
+    };
+  }
+
+componentDidMount() {
+  fetch('https://ghibliapi.herokuapp.com/films')
+    .then(res => res.json())
+    .then(json => {
+      console.log("data returned: ", json)
+      this.setState({
+        isLoaded: true,
+        items: json,
+      })
+  })
+}
+
+
+  render() {
+    var { isLoaded, items } = this.state;
+    
+    if (!isLoaded) {
+      return <div>..Loading..</div>
+    } else {
+      
+      return(
+        <div className="list">         
+          <img src={'https://upload.wikimedia.org/wikipedia/en/thumb/c/ca/Studio_Ghibli_logo.svg/300px-Studio_Ghibli_logo.svg.png'} alt="logo"></img>
+          <h1>Studio Ghibli Films</h1>
+          <ul>
+            {items.map(item => (
+              <li key={item.id}>
+                <div className="title"><h4>Title: </h4>  
+                  <p>"{item.title}"</p>
+                </div>
+                <div className="date"><h4>Resease Date: </h4>
+                  {item.release_date}
+                </div>
+              </li>
+             ))}
+          </ul>
+        </div>
+      );
+
+    }  
+  }
+};
+
+/////////////////
+React.render(<MyComponent />, document.getElementById('app'));
+
+
+
